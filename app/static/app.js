@@ -172,4 +172,15 @@ $('#refresh').addEventListener('click', refresh);
 $('#search').addEventListener('input', render);
 $('#low-stock-card').addEventListener('click', () => setView('low'));
 document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
+async function loadStorageInfo() {
+  try {
+    const info = await api('/storage');
+    $('#storage-label').textContent = info.persistent ? 'Azure Table Storage' : 'In-memory inventory';
+    $('#storage-note').textContent = info.persistent ? 'Inventory is saved in Azure.' : 'Inventory resets when the server restarts.';
+  } catch {
+    $('#storage-label').textContent = 'Storage status unavailable';
+    $('#storage-note').textContent = 'Unable to check storage configuration.';
+  }
+}
+loadStorageInfo();
 refresh();

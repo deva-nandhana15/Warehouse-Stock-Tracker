@@ -18,6 +18,7 @@ COPY app/requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY app/app.py .
+COPY app/inventory_store.py .
 COPY app/templates ./templates
 COPY app/static ./static
 

@@ -59,7 +59,7 @@ pipeline {
                 Invoke-Checked terraform @('-chdir=terraform', 'fmt', '-check')
                 Invoke-Checked terraform @('-chdir=terraform', 'init', '-backend=false', '-input=false', '-lockfile=readonly')
                 Invoke-Checked terraform @('-chdir=terraform', 'validate', '-no-color')
-                Invoke-Checked trivy @('config', '--severity', 'HIGH,CRITICAL', '--exit-code', '1', '--format', 'json', '--output', 'reports/trivy-config.json', 'terraform')
+                Invoke-Checked trivy @('config', '--ignorefile', '.trivyignore.yaml', '--severity', 'HIGH,CRITICAL', '--exit-code', '1', '--format', 'json', '--output', 'reports/trivy-config.json', 'terraform')
             ''' }
         }
         stage('Docker build') {
@@ -76,6 +76,12 @@ pipeline {
         }
         stage('Container smoke and Newman') {
             steps { powershell './scripts/test-container.ps1 -Image $env:IMAGE_REF' }
+        }
+        stage('Persistent storage integration') {
+            steps { powershell '''
+                . ./scripts/common.ps1
+                Invoke-Checked ./.venv/Scripts/python.exe @('scripts/test-table-persistence.py')
+            ''' }
         }
         stage('Push') {
             when { expression { params.PUBLISH_IMAGE && (env.BRANCH_NAME == 'main' || (!env.BRANCH_NAME && env.GIT_BRANCH == 'origin/main')) } }

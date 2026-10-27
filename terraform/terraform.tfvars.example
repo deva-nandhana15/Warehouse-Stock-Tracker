@@ -3,6 +3,7 @@
 # Owner only: review the plan and current cost before applying.
 
 azure_subscription_id = "00000000-0000-0000-0000-000000000000"
+storage_account_name  = "youruniquewarehousestore"
 
 # Required: replace this placeholder with the full SHA of a published,
 # scanned image. The placeholder is illustrative, not a deployable image.

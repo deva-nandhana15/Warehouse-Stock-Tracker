@@ -21,6 +21,7 @@ Jenkinsfile
 **
 !app/
 !app/app.py
+!app/inventory_store.py
 !app/requirements.txt
 !app/templates/
 !app/templates/**

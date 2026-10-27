@@ -36,7 +36,7 @@ variable "container_image_tag" {
 }
 
 variable "dns_label" {
-  description = "DNS name label for the container's public FQDN. Must be unique within the region."
+  description = "DNS label for the container group. Must be unique within the region."
   type        = string
   default     = "warehouse-stock-tracker"
 }
@@ -67,4 +67,21 @@ variable "container_memory" {
     condition     = var.container_memory >= 1
     error_message = "Allocate at least 1 GB to this single-container ACI group."
   }
+}
+
+variable "storage_account_name" {
+  description = "Globally unique Azure Storage account name: 3-24 lowercase letters/digits."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9]{3,24}$", var.storage_account_name))
+    error_message = "Use 3-24 lowercase letters and digits for the storage account name."
+  }
+}
+
+variable "developer_object_id" {
+  description = "Optional Entra user object ID to grant local az-login access to inventory data."
+  type        = string
+  default     = null
+  nullable    = true
 }

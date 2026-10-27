@@ -1,5 +1,11 @@
 # Official verification sources
 
+Azure-storage update: official PyPI APIs confirmed azure-data-tables 12.7.0,
+azure-identity 1.27.0 and azure-core 1.41.0. GitHub release APIs confirmed Cosign
+3.1.4, Sigstore Python 4.5.1 and Azurite 3.37.0. Versioned AzureRM 5.10.0 storage
+account/table schema and Azure Tables conditional-update documentation were checked.
+See azure-deployment.md for the relevant Microsoft references.
+
 Source checks during implementation, 2026-10-26/27. Actual execution results are
 listed separately in verification.md. A source check does not establish a test pass.
 

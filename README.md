@@ -49,8 +49,17 @@ the same Docker container. It adapts to smaller screens with a scrollable table.
 | POST | `/items/<sku>/issue` | Stock out; 409 if insufficient |
 | GET | `/alerts/low-stock` | Items at or below reorder level |
 
-Inventory is in memory and resets on restart. Use one Gunicorn worker and one
-instance. The API has no authentication or HTTPS; use synthetic classroom data.
+Local inventory defaults to memory and resets on restart. Azure mode persists data
+in Table Storage. The public app has no authentication or HTTPS front end; use
+synthetic classroom data only.
+
+Azure persistent storage support is now implemented. `STORAGE_BACKEND=azure-table`
+uses Azure Table Storage with managed identity in ACI; local runs still default
+to memory. See [Azure deployment](docs/azure-deployment.md). The current draft
+Terraform storage-network finding AZU-0012 has an owner-approved, file-scoped
+exception expiring 2026-11-26. See [the accepted risk](docs/security-exceptions.md).
+All other security gates remain blocking. Cloud deployment still requires the
+owner to review and apply the saved Terraform plan.
 
 ## Pipeline
 

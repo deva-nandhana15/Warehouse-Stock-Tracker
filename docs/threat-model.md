@@ -4,6 +4,13 @@ Assets: repository integrity, registry token, Azure identity, Terraform state,
 inventory integrity and build evidence. Boundaries: developer to GitHub, GitHub to
 Jenkins, Jenkins to Docker Hub, deployment owner to Azure, public client to API.
 
+Azure persistence uses table-scoped managed identity, conditional ETag writes,
+TLS 1.2+ and disabled account-key authorization. The owner accepted the public
+storage-network endpoint for this classroom demo; see security-exceptions.md for
+the exact expiring AZU-0012 exception. This is separate from the other security
+gates, which continue to block. Ambiguous stock-update failures require checking
+the current quantity before retry because the API has no idempotency keys yet.
+
 | Threat | Control | Residual risk |
 |---|---|---|
 | Secret committed to Git | Gitleaks history scan, redacted reports, ignored local files | Rotate any exposed credential; deleting commits is insufficient |

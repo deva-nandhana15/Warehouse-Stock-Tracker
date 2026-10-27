@@ -22,6 +22,13 @@ resource "azurerm_container_group" "app" {
   dns_name_label      = var.dns_label
   restart_policy      = "Always"
 
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.app.id]
+  }
+
+  depends_on = [azurerm_role_assignment.app_table]
+
   container {
     name   = "warehouse-api"
     image  = "${var.container_image}:${var.container_image_tag}"
@@ -34,8 +41,13 @@ resource "azurerm_container_group" "app" {
     }
 
     environment_variables = {
-      APP_VERSION = var.container_image_tag
-      PORT        = tostring(var.container_port)
+      APP_VERSION          = var.container_image_tag
+      PORT                 = tostring(var.container_port)
+      STORAGE_BACKEND      = "azure-table"
+      AZURE_AUTH_MODE      = "managed-identity"
+      AZURE_TABLE_ENDPOINT = azurerm_storage_account.inventory.primary_table_endpoint
+      AZURE_TABLE_NAME     = azurerm_storage_table.inventory.name
+      AZURE_CLIENT_ID      = azurerm_user_assigned_identity.app.client_id
     }
 
     # Liveness probe matches the Dockerfile HEALTHCHECK.

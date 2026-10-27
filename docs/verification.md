@@ -4,6 +4,44 @@ Recorded 2026-10-27, Asia/Calcutta. These results distinguish local checks from
 the remaining Jenkins and Azure work. No phase requiring cloud/Jenkins evidence
 is marked complete.
 
+## Azure storage implementation update
+
+- Azure CLI confirmed the selected subscription is Enabled; no cloud resources
+  have been created by this work.
+- Runtime supports Azure Table Storage, managed identity/CLI authentication,
+  conditional ETag updates, bounded concurrency retries, and storage readiness.
+- 51 unit tests pass, including Azure SDK Int64 decoding, concurrent-update
+  conflicts, insufficient stock, storage failure handling and endpoint validation.
+- Official Azurite 3.37.0 integration passes: records survive a new Flask/SDK
+  instance; concurrent issues do not overdraw stock. Emulator containers removed.
+- Docker build passes. Packaged dashboard, assets, UID 10001 and 36 Newman
+  assertions pass. This tests the container locally, not Azure runtime identity.
+- Cosign 3.1.4 authenticated with Python Sigstore 4.5.1, then Trivy 0.76.1 archive
+  verified using its exact GitHub Actions release-workflow identity.
+- Trivy filesystem and image gates pass for fixable CRITICAL vulnerabilities.
+- Bandit and Gitleaks pass. Terraform formatting/validation pass.
+- Terraform security scan FAILS AZU-0012: unrestricted storage-network endpoint.
+  No suppression or weakening of the blocking gate has been introduced.
+- Owner selected keeping ACI and reviewing networking alternatives before any
+  hosting change. No deployable plan/apply or image publication for this change
+  has been claimed. The storage-enabled changes remain local pending that choice.
+- Follow-up: owner requested keeping the project simple. Gateway/NAT/VNet drafts
+  were removed. The simple public ACI + managed-identity Table Storage configuration
+  validates. A narrowly scoped AZU-0012 policy exception remains unapproved; all
+  existing blocking scan behavior is unchanged.
+
+The table below records the earlier baseline; this update supersedes its local
+Docker, Trivy and unit-test entries. Jenkins/Azure deployment evidence is pending.
+
+### Approved simple-deployment release
+
+Owner approved the scoped AZU-0012 network-policy exception on 2026-10-27; it
+expires 2026-11-26. The actual Terraform scan now passes with that exception;
+51 unit tests, Bandit and Gitleaks pass. Filesystem and built-image Trivy scans
+passed for fixable CRITICAL vulnerabilities. No scan exit code was disabled.
+The extra temporary scope-probe command was declined and not run. See
+security-exceptions.md for the fixed scan-root/path convention and accepted risk.
+
 | Check | Observed result |
 |---|---|
 | Python | 3.14.3 on this Windows machine |

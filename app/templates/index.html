@@ -43,9 +43,9 @@
           <div class="toolbar"><label class="search"><svg><use href="#search-icon"/></svg><input id="search" type="search" placeholder="Search by name or SKU…" aria-label="Search inventory"></label><div class="segmented" aria-label="Filter inventory"><button data-view="all" class="selected" aria-pressed="true">All items</button><button data-view="low" aria-pressed="false">Low stock</button></div></div>
           <div id="load-error" class="load-error" role="alert" hidden></div>
           <div class="table-scroll"><table><thead><tr><th scope="col">ITEM</th><th scope="col">SKU</th><th scope="col" class="number">ON HAND</th><th scope="col" class="number">REORDER AT</th><th scope="col">STATUS</th><th scope="col" class="actions-heading">ADJUST STOCK</th></tr></thead><tbody id="inventory-body"><tr><td colspan="6" class="empty">Loading your inventory…</td></tr></tbody></table></div>
-          <div class="panel-footer"><span id="results-count" aria-live="polite">Loading items…</span><span><span class="tiny-dot"></span>In-memory inventory</span></div>
+          <div class="panel-footer"><span id="results-count" aria-live="polite">Loading items…</span><span><span class="tiny-dot"></span><span id="storage-label">Checking storage…</span></span></div>
         </section>
-        <footer class="page-footer"><span>Less guesswork. More in stock.</span><span>Inventory resets when the server restarts.</span></footer>
+        <footer class="page-footer"><span>Less guesswork. More in stock.</span><span id="storage-note">Connecting to your inventory.</span></footer>
       </main>
     </div>
   </div>

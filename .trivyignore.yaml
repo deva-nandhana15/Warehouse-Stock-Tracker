@@ -1,0 +1,13 @@
+# Owner approved 2026-10-27: simple classroom ACI + Azure Table Storage.
+# Applies only to the storage-network rule in this file; other findings still block.
+misconfigurations:
+  - id: AZU-0012
+    paths:
+      # Trivy reports this path relative to the fixed terraform scan root.
+      - storage.tf
+    statement: >-
+      Approved classroom exception: the public ACI deployment accesses Azure Table
+      Storage over HTTPS using table-scoped managed identity. Anonymous access and
+      shared-key authentication are disabled. No real warehouse data is permitted.
+      Network isolation is deferred to keep this course demonstration simple.
+    expired_at: 2026-11-26

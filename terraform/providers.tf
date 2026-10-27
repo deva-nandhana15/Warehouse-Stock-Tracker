@@ -15,4 +15,6 @@ terraform {
 provider "azurerm" {
   features {}
   subscription_id = var.azure_subscription_id
+  # Keep plan read-only: the owner registers required providers explicitly.
+  resource_provider_registrations = "none"
 }
