@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Secrets and local config - NEVER commit
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+*.tfvars
+!terraform.tfvars.example
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+# .terraform.lock.hcl SHOULD be committed (blueprint requirement)
+
+# Generated reports (use Jenkins artifacts instead)
+reports/*
+!reports/.gitkeep
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Saved Terraform plans can contain sensitive deployment inputs.
+tfplan
+*.tfplan
+*.tfvars.json
+
+# Local tools and API-test dependencies
+.tools/
+node_modules/
+tmp/

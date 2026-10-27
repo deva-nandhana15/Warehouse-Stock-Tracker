@@ -1,0 +1,18 @@
+# Copy to terraform.tfvars and fill in deployment inputs locally.
+# The real file is Git-ignored. Never put credentials in it.
+# Owner only: review the plan and current cost before applying.
+
+azure_subscription_id = "00000000-0000-0000-0000-000000000000"
+
+# Required: replace this placeholder with the full SHA of a published,
+# scanned image. The placeholder is illustrative, not a deployable image.
+container_image_tag = "0000000000000000000000000000000000000000"
+
+# Optional overrides:
+# resource_group_name = "rg-warehouse-stock-tracker"
+# location            = "centralindia"
+# container_image     = "dva15/warehouse-stock-tracker"
+# dns_label           = "warehouse-stock-tracker"
+# container_port      = 5000
+# container_cpu       = 1
+# container_memory    = 1

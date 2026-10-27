@@ -1,0 +1,8 @@
+{
+  "name": "warehouse-stock-tracker-checks",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {"test:api": "newman run postman/collection.json"},
+  "devDependencies": {"newman": "6.2.3"},
+  "overrides": {"handlebars": "4.7.10"}
+}

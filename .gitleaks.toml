@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Generated dependencies, provider binaries and local reports"
+paths = ['''(^|[\\/])(?:\.venv|node_modules|\.tools|\.terraform|reports|\.pytest_cache)([\\/]|$)''']
