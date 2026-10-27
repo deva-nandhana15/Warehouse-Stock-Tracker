@@ -18,6 +18,8 @@ COPY app/requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY app/app.py .
+COPY app/templates ./templates
+COPY app/static ./static
 
 USER 10001:10001
 

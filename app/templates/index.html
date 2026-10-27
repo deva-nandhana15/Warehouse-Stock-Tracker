@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fafafa">
+  <title>Warehouse — Stock Tracker</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="box" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z M3 8v9l9 5 9-5V8 M12 13v9 M7.5 5.5l9 5"/></symbol>
+    <symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="alert" viewBox="0 0 24 24"><path d="M10.3 4 2.5 18a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z M12 9v4 M12 17h.01"/></symbol>
+    <symbol id="search-icon" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M12 4v16 M6 14l6 6 6-6"/></symbol>
+    <symbol id="refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5 M4 17v-5h5 M6 6a8 8 0 0 1 14 6 M18 18a8 8 0 0 1-14-6"/></symbol>
+  </svg>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Warehouse home"><span class="brand-icon"><svg><use href="#box"/></svg></span><span>Warehouse<span class="brand-caption">STOCK TRACKER</span></span></a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav aria-label="Inventory views">
+        <button class="nav-item active" data-view="all" aria-current="page"><svg><use href="#grid"/></svg>Inventory<span id="nav-total" class="nav-count">—</span></button>
+        <button class="nav-item" data-view="low"><svg><use href="#alert"/></svg>Low stock<span id="nav-low" class="nav-count">—</span></button>
+      </nav>
+      <div class="sidebar-bottom"><span class="workspace-mark">W</span><div>My warehouse<small>Local workspace</small></div><span class="status-dot" title="Local workspace"></span></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><span>Workspace <span class="breadcrumb-divider">/</span> <strong id="breadcrumb">Inventory</strong></span><span class="topbar-note">A place for everything.</span></header>
+      <main>
+        <div class="page-heading"><div><p class="eyebrow">YOUR WAREHOUSE, AT A GLANCE</p><h1 id="page-title">Inventory</h1><p class="subtitle" id="page-subtitle">A little clarity for everything you keep.</p></div><button class="button primary" id="add-item"><svg><use href="#plus"/></svg>Add item</button></div>
+        <section class="stats" aria-label="Inventory summary">
+          <div class="stat"><div class="stat-label">Total items<svg><use href="#box"/></svg></div><strong id="total-items">—</strong><p>Unique products in your warehouse</p></div>
+          <div class="stat"><div class="stat-label">Units on hand<svg><use href="#grid"/></svg></div><strong id="total-units">—</strong><p>Across your entire inventory</p></div>
+          <button class="stat stat-button" id="low-stock-card"><span class="stat-label">Low stock<svg><use href="#alert"/></svg></span><strong id="low-count">—</strong><span class="stat-caption">Items that need a little attention <span aria-hidden="true">↗</span></span></button>
+        </section>
+        <section class="inventory-panel" aria-labelledby="table-heading">
+          <div class="panel-heading"><div><h2 id="table-heading">All inventory <span id="item-count" class="pill">—</span></h2><p id="table-description">The right stock. In the right place.</p></div><button id="refresh" class="icon-button" aria-label="Refresh inventory" title="Refresh inventory"><svg><use href="#refresh"/></svg></button></div>
+          <div class="toolbar"><label class="search"><svg><use href="#search-icon"/></svg><input id="search" type="search" placeholder="Search by name or SKU…" aria-label="Search inventory"></label><div class="segmented" aria-label="Filter inventory"><button data-view="all" class="selected" aria-pressed="true">All items</button><button data-view="low" aria-pressed="false">Low stock</button></div></div>
+          <div id="load-error" class="load-error" role="alert" hidden></div>
+          <div class="table-scroll"><table><thead><tr><th scope="col">ITEM</th><th scope="col">SKU</th><th scope="col" class="number">ON HAND</th><th scope="col" class="number">REORDER AT</th><th scope="col">STATUS</th><th scope="col" class="actions-heading">ADJUST STOCK</th></tr></thead><tbody id="inventory-body"><tr><td colspan="6" class="empty">Loading your inventory…</td></tr></tbody></table></div>
+          <div class="panel-footer"><span id="results-count" aria-live="polite">Loading items…</span><span><span class="tiny-dot"></span>In-memory inventory</span></div>
+        </section>
+        <footer class="page-footer"><span>Less guesswork. More in stock.</span><span>Inventory resets when the server restarts.</span></footer>
+      </main>
+    </div>
+  </div>
+  <dialog id="item-dialog" aria-labelledby="dialog-title">
+    <form id="item-form">
+      <div class="dialog-header"><div><p class="eyebrow" id="dialog-eyebrow">MAKE ROOM FOR SOMETHING NEW</p><h2 id="dialog-title">Add an item</h2></div><button type="button" class="close-button" id="close-dialog" aria-label="Close dialog">×</button></div>
+      <p id="dialog-description" class="dialog-description">A few details, and you're ready to go.</p>
+      <div id="add-fields"><label>Item name<input name="name" id="item-name" maxlength="100" placeholder="e.g. Packing tape" required></label><label>SKU<input name="sku" id="item-sku" maxlength="32" pattern="[A-Za-z0-9_-]{1,32}" placeholder="e.g. WH-004" required><span class="field-hint">Letters, numbers, hyphens and underscores.</span></label></div>
+      <div class="form-row"><label><span id="quantity-label">Opening quantity</span><input name="quantity" type="number" min="0" step="1" value="0" required></label><label id="reorder-field">Reorder level<input name="reorder_level" type="number" min="0" step="1" value="5" required></label></div>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="button" id="cancel-dialog">Cancel</button><button type="submit" class="button primary" id="save-item">Add item</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

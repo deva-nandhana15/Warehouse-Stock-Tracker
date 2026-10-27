@@ -27,12 +27,22 @@ docker build -f docker/Dockerfile -t warehouse-stock-tracker:dev .
 ./scripts/test-container.ps1 -Image warehouse-stock-tracker:dev
 ```
 
+## Dashboard
+
+Run `./.venv/Scripts/python.exe app/app.py`, then open http://127.0.0.1:5000 in a
+browser. The monochrome dashboard includes inventory totals, search, a low-stock
+view, an add-item form, and receive/issue dialogs. All changes use the Flask API.
+If an older server is already running, stop it and restart to load the dashboard.
+The UI has no external fonts, frameworks or CDN dependencies and is included in
+the same Docker container. It adapts to smaller screens with a scrollable table.
+
 ## API
 
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/health` | Health status |
-| GET | `/` | Application name and APP_VERSION |
+| GET | `/` | Dashboard for browsers; JSON metadata for JSON clients |
+| GET | `/api` | Application name and APP_VERSION, always JSON |
 | GET | `/items` | Sorted inventory |
 | POST | `/items` | Add {sku, name, quantity?, reorder_level?} |
 | POST | `/items/<sku>/receive` | Stock in {quantity>0} |

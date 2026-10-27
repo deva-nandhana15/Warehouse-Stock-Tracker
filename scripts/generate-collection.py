@@ -4,7 +4,7 @@ from pathlib import Path
 
 cases = [
     ('Health', 'GET', '/health', None, 200, 'pm.expect(pm.response.json().status).to.eql("ok");'),
-    ('Version', 'GET', '/', None, 200, 'pm.expect(pm.response.json().name).to.eql("Warehouse Stock Tracker");'),
+    ('Version', 'GET', '/api', None, 200, 'pm.expect(pm.response.json().name).to.eql("Warehouse Stock Tracker");'),
     ('List items', 'GET', '/items', None, 200, 'pm.expect(pm.response.json()).to.be.an("array");'),
     ('Add item', 'POST', '/items', {'sku': '{{sku}}', 'name': 'API test item', 'quantity': 10, 'reorder_level': 5}, 201, 'pm.expect(pm.response.json().quantity).to.eql(10);'),
     ('Duplicate item', 'POST', '/items', {'sku': '{{sku}}', 'name': 'Duplicate'}, 409, ''),

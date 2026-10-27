@@ -16,6 +16,12 @@ in-memory data, so do not increase worker or replica counts. Restart, redeploy a
 rollback reset inventory. There is no database, authentication or TLS termination.
 This is a classroom demonstration using synthetic data.
 
+Flask serves the monochrome dashboard at `/` for browser HTML requests, with local
+CSS and JavaScript under `/static`. The UI calls the same inventory endpoints,
+renders user values as text, and handles API validation failures in the dialog.
+Metadata remains available as JSON at `/api` and at `/` for JSON clients. Templates
+and assets are packaged in the existing Docker image without an extra build step.
+
 Terraform owns one resource group and one public ACI group with an HTTP liveness
 probe. Images must be public for anonymous ACI pulls and tagged with a full commit
 SHA. Azure authentication and state remain on the deployment owner's machine.

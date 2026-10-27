@@ -31,7 +31,9 @@ docker build -f docker/Dockerfile -t warehouse-stock-tracker:dev .
 
 The container helper binds a random loopback port, waits for health, checks UID
 10001, executes Newman, and stops only the container it created in a finally block.
-For development use `./.venv/Scripts/python.exe app/app.py` and, in another terminal,
+For development use `./.venv/Scripts/python.exe app/app.py`, then open
+http://127.0.0.1:5000 in your browser for the dashboard. Restart any old Flask
+process before trying the new UI. For API tests, in another terminal,
 `npm.cmd run test:api`. Gunicorn runs inside Linux containers, not Windows.
 
 ## 2. Terraform validation
@@ -102,7 +104,7 @@ terraform -chdir=terraform plan -out=tfplan
 terraform -chdir=terraform apply tfplan
 terraform -chdir=terraform output -raw app_url
 ./scripts/wait-health.ps1 -BaseUrl 'http://YOUR-FQDN:5000'
-Invoke-RestMethod 'http://YOUR-FQDN:5000/'
+Invoke-RestMethod 'http://YOUR-FQDN:5000/api'
 ```
 
 Check the version endpoint matches the released SHA. For rollback, select a

@@ -7,7 +7,7 @@ import os
 import re
 import threading
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 
 SKU_PATTERN = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
 
@@ -42,7 +42,12 @@ def create_app(seed=None):
         return response
 
     @app.get("/")
+    @app.get("/api")
     def index():
+        if request.path == "/" and request.accept_mimetypes.best_match(
+            ["text/html", "application/json"]
+        ) == "text/html":
+            return render_template("index.html")
         return jsonify(
             {
                 "name": "Warehouse Stock Tracker",

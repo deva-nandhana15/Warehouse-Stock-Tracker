@@ -8,7 +8,7 @@ is marked complete.
 |---|---|
 | Python | 3.14.3 on this Windows machine |
 | Dependencies | Pinned runtime, pytest 9.1.1 and Bandit 1.9.4 installed in .venv |
-| pytest | PASS: 35 tests, reports/junit.xml |
+| pytest | PASS: 37 tests including dashboard and asset serving, reports/junit.xml |
 | Bandit | PASS: no MEDIUM/HIGH findings; reports/bandit.json |
 | Gitleaks | 8.30.1 ZIP downloaded, published SHA256 verified |
 | Local secret scan | PASS: no leaks in project sources; reports/gitleaks.json |
@@ -30,7 +30,11 @@ is marked complete.
 | Teardown | NOT RUN: this implementation created no cloud resources |
 
 The SKU validation regression test rejects a trailing newline, increasing the
-guide's original 34 cases to 35. Initial Gitleaks directory findings came only from
+guide's original 34 cases to 35; two dashboard/metadata cases bring the total to 37.
+Browser checks verified adding an item, issuing stock, insufficient-stock error
+handling, receiving stock, search and low-stock filtering against the live Flask
+server. Container packaging was updated for templates/assets but still requires
+a running Docker engine for verification. Initial Gitleaks directory findings came only from
 the downloaded scanner's own README examples. Generated tool/dependency folders
 are now explicitly excluded by .gitleaks.toml; application sources remain scanned.
 The pipeline scans Git history, which has not yet been tested for a dedicated
