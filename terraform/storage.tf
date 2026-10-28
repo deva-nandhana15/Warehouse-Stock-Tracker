@@ -42,7 +42,7 @@ resource "azurerm_user_assigned_identity" "app" {
 }
 
 resource "azurerm_role_assignment" "app_table" {
-  scope                = azurerm_storage_table.inventory.id
+  scope                = azurerm_storage_table.inventory.resource_manager_id
   role_definition_name = "Storage Table Data Contributor"
   principal_id         = azurerm_user_assigned_identity.app.principal_id
   principal_type       = "ServicePrincipal"
@@ -51,7 +51,7 @@ resource "azurerm_role_assignment" "app_table" {
 # Optional: enable az-login authentication for the developer without storage keys.
 resource "azurerm_role_assignment" "developer_table" {
   count                = var.developer_object_id == null ? 0 : 1
-  scope                = azurerm_storage_table.inventory.id
+  scope                = azurerm_storage_table.inventory.resource_manager_id
   role_definition_name = "Storage Table Data Contributor"
   principal_id         = var.developer_object_id
   principal_type       = "User"
