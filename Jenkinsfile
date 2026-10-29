@@ -13,8 +13,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
                 script {
+                    def checkoutInfo = checkout scm
+                    env.CHECKED_OUT_BRANCH = checkoutInfo.GIT_BRANCH ?: ''
+                    env.PUBLISH_FROM_MAIN = (env.CHECKED_OUT_BRANCH in ['main', 'origin/main'] && (!env.BRANCH_NAME || env.BRANCH_NAME == 'main')) ? 'true' : 'false'
+                    echo "Checked out branch: ${env.CHECKED_OUT_BRANCH}"
+                    if (params.PUBLISH_IMAGE && env.PUBLISH_FROM_MAIN != 'true') {
+                        error('Publishing requires a trusted main branch checkout')
+                    }
                     env.COMMIT_SHA = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
                     if (!(env.COMMIT_SHA ==~ /[0-9a-f]{40}/)) { error('Invalid commit SHA') }
                     if (!(params.IMAGE_REPOSITORY ==~ /[a-z0-9_-]+\/[a-z0-9._-]+/)) { error('Invalid image repository') }
@@ -70,7 +76,7 @@ pipeline {
             steps { sh '.venv/bin/python scripts/test-table-persistence.py' }
         }
         stage('Push') {
-            when { expression { params.PUBLISH_IMAGE && (env.BRANCH_NAME == 'main' || (!env.BRANCH_NAME && env.GIT_BRANCH == 'origin/main')) } }
+            when { expression { params.PUBLISH_IMAGE && env.PUBLISH_FROM_MAIN == 'true' } }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_TOKEN')]) {
                     sh '''
@@ -85,7 +91,7 @@ pipeline {
             }
         }
         stage('Manual deployment handoff') {
-            when { expression { params.PUBLISH_IMAGE && (env.BRANCH_NAME == 'main' || (!env.BRANCH_NAME && env.GIT_BRANCH == 'origin/main')) } }
+            when { expression { params.PUBLISH_IMAGE && env.PUBLISH_FROM_MAIN == 'true' } }
             steps {
                 writeFile file: 'reports/deployment.txt', text: "Published image: ${env.IMAGE_REF}\nReview a Terraform plan before manual Azure deployment. Jenkins does not change Azure resources.\n"
             }
