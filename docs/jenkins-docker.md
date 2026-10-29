@@ -4,6 +4,16 @@ The default Jenkinsfile now targets the `docker-linux` node label. The earlier
 Windows pipeline is retained as `Jenkinsfile.windows` for an explicitly configured
 Windows agent. This change does not redeploy the running Azure application.
 
+## Verified run
+
+On 2026-10-29, Docker Jenkins build **#4** completed with **SUCCESS** for commit
+`7efedecf4f32a090066c301a189196821519bf8c` in 2 minutes 29 seconds. It passed
+51 pytest tests, Gitleaks, Bandit, the configured Trivy dependency/IaC/image gates,
+Terraform validation, the dashboard/non-root container checks, 36 Newman
+assertions, and Azurite persistence/concurrency integration. Publishing was
+disabled, so push and deployment handoff were skipped. Local evidence is in
+`reports/jenkins-build-4/`; Jenkins also archives the reports with the build.
+
 ## Local services
 
 `compose.jenkins.yaml` starts Jenkins 2.580.2 and a separate Docker 28.5.1 engine.
@@ -37,6 +47,10 @@ the project's public GitHub repository, branch `main`, script path `Jenkinsfile`
 It schedules the first build. Jenkins keeps its standard setup wizard, security
 realm and CSRF protection; the bootstrap never reads or prints administrator
 passwords. Complete the unlock/admin wizard yourself to view the job in the UI.
+Keep the bundled pinned plugins when completing setup. After signing in, open
+`Warehouse-Stock-Tracker` and select **Build with Parameters**, leave
+`PUBLISH_IMAGE` unchecked, and select **Build** to repeat the verified run.
+The job also polls GitHub every five minutes while these containers are running.
 
 To display the initial unlock password in YOUR terminal only, run:
 
