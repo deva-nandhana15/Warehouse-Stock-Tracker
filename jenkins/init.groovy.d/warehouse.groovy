@@ -42,6 +42,8 @@ class WarehouseBuildEvidence extends RunListener<WorkflowRun> {
     }
 }
 RunListener.all().add(new WarehouseBuildEvidence())
-if (job.lastBuild == null) {
+def request = new File(instance.rootDir, 'warehouse-run-request')
+if (job.lastBuild == null || request.exists()) {
     job.scheduleBuild2(10)
+    if (request.exists()) request.delete()
 }

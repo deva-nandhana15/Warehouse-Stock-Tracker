@@ -3,7 +3,6 @@ pipeline {
     options {
         skipDefaultCheckout(true)
         disableConcurrentBuilds()
-        timestamps()
         timeout(time: 45, unit: 'MINUTES')
     }
     triggers { pollSCM('H/5 * * * *') }
