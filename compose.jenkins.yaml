@@ -9,7 +9,9 @@ services:
       - docker-certs:/certs/client
       - docker-data:/var/lib/docker
     networks:
-      - ci
+      ci:
+        aliases:
+          - docker
     restart: unless-stopped
   jenkins:
     build:
@@ -18,7 +20,7 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
     environment:
-      DOCKER_HOST: tcp://engine:2376
+      DOCKER_HOST: tcp://docker:2376
       DOCKER_CERT_PATH: /certs/client
       DOCKER_TLS_VERIFY: "1"
       DOCKER_TEST_HOST: engine
