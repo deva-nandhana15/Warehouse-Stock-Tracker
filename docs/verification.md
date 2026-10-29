@@ -1,5 +1,32 @@
 # Implementation verification
 
+## Live Azure verification — 2026-10-29
+
+The owner explicitly authorized CLI resource creation in this chat, superseding
+the earlier owner-only apply instruction for this deployment. Terraform created
+the project resource group, Standard LRS storage account, inventory table,
+user-assigned managed identity, table-scoped role and Azure Container Instance.
+
+- Container provisioning: Succeeded; runtime: Running; region: Central India.
+- URL: http://warehouse-devanandhana15.centralindia.azurecontainer.io:5000
+- Published application image: dva15/warehouse-stock-tracker:18424bff5d92f790254b661d9c4bbc2bb9c07983
+- Live /health, /ready, /storage, release version and HTML dashboard checks: PASS.
+- Managed-identity table access: PASS with shared-key authentication disabled.
+- Persistence: PASS; a synthetic verification item with quantity 7 survived an
+  actual Azure container restart. The item remains labelled synthetic in the UI.
+- Evidence: reports/azure-live-verification.json and reports/azure-dashboard.png.
+- AzureRM table provisioning attempted key-based authentication, so table
+  management now uses the official pinned AzAPI 2.13.0 provider and ARM API.
+- Transient creation failures were recovered without deletion: the healthy
+  identity was imported into Terraform, and the successful storage account's
+  failed-request flag was cleared after checking its provisioning state.
+- Terraform security scan: PASS with only the previously approved AZU-0012 exception.
+- Jenkins: NOT VERIFIED; installation, job setup and actual build evidence remain.
+
+The earlier entries below are historical and are superseded by this section for
+Azure deployment and live persistence. Azure resources are now provisioned and
+incur charges while retained. Storage has explicit deletion protection.
+
 Recorded 2026-10-27, Asia/Calcutta. These results distinguish local checks from
 the remaining Jenkins and Azure work. No phase requiring cloud/Jenkins evidence
 is marked complete.

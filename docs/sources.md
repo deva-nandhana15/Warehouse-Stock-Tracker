@@ -6,6 +6,12 @@ azure-identity 1.27.0 and azure-core 1.41.0. GitHub release APIs confirmed Cosig
 account/table schema and Azure Tables conditional-update documentation were checked.
 See azure-deployment.md for the relevant Microsoft references.
 
+Live-deployment fixes verified on 2026-10-29: Azure/azapi 2.13.0 from the official
+GitHub release API and signed Terraform Registry distribution. Table management
+API schema: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts/tableservices/tables .
+AzureRM's storage_use_azuread flag covers Blob/Queue APIs, so the table uses ARM
+provisioning with AzAPI instead. ACI HTTP probe scheme is lowercase `http`.
+
 Source checks during implementation, 2026-10-26/27. Actual execution results are
 listed separately in verification.md. A source check does not establish a test pass.
 

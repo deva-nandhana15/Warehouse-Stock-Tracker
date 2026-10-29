@@ -28,5 +28,5 @@ output "table_endpoint" {
 }
 
 output "table_name" {
-  value = azurerm_storage_table.inventory.name
+  value = azapi_resource.inventory_table.name
 }

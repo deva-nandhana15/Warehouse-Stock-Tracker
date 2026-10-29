@@ -7,10 +7,21 @@ enforced by the scoped `.trivyignore.yaml`, expiring 2026-11-26. Other security
 findings still block. Local tests and security scans pass; Azure deployment and
 Jenkins execution still need real evidence.
 
+**Live deployment verified 2026-10-29:** the owner subsequently authorized CLI
+creation, and the application is running at
+http://warehouse-devanandhana15.centralindia.azurecontainer.io:5000 . Health,
+table readiness, expected release and persistence after an actual container
+restart passed. Jenkins execution is the remaining CI/CD verification task.
+
 The application runs in Azure Container Instances (ACI). Inventory is stored in
 Azure Table Storage and survives app restarts and image redeployments. Terraform
 defines both, a user-assigned managed identity, and table-scoped data permissions.
 Azure mode starts with an empty inventory and never resets or reseeds cloud data.
+
+The inventory table is provisioned through the Azure management API using pinned
+AzAPI provider 2.13.0. AzureRM 5.10.0 manages the other resources. This avoids the
+AzureRM table resource's shared-key authentication path while retaining disabled
+shared-key access on the storage account. No extra Azure services are required.
 
 ## Owner prerequisites
 
@@ -85,6 +96,11 @@ independent process-liveness check. Role assignments can take time to propagate;
 if readiness initially returns 503, wait and retry before changing credentials.
 
 ## Prove persistence
+
+The repeatable helper is `./scripts/verify-azure.ps1`. Its default mode only reads
+health, storage, release metadata and the dashboard. Use `-TestPersistence` only
+when a synthetic item and one container restart are intended; results are saved
+to reports/azure-live-verification.json. Optionally pass `-ExpectedVersion`.
 
 Add an item through the Azure dashboard, record its SKU and quantity, and restart
 the ACI group yourself via the Azure portal. Wait for `/ready`, refresh the page,

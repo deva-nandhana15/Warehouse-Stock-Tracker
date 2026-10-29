@@ -2,6 +2,11 @@
 
 Repository: [deva-nandhana15/Warehouse-Stock-Tracker](https://github.com/deva-nandhana15/Warehouse-Stock-Tracker)
 
+Live Azure application: http://warehouse-devanandhana15.centralindia.azurecontainer.io:5000
+
+Azure deployment and persistence across a container restart were verified on
+2026-10-29. Jenkins installation and a real pipeline run remain pending.
+
 A Flask inventory API with a Windows-native Jenkins DevSecOps delivery pipeline,
 Docker packaging, Newman API tests and Terraform for Azure Container Instances.
 
@@ -58,8 +63,8 @@ uses Azure Table Storage with managed identity in ACI; local runs still default
 to memory. See [Azure deployment](docs/azure-deployment.md). The current draft
 Terraform storage-network finding AZU-0012 has an owner-approved, file-scoped
 exception expiring 2026-11-26. See [the accepted risk](docs/security-exceptions.md).
-All other security gates remain blocking. Cloud deployment still requires the
-owner to review and apply the saved Terraform plan.
+All other security gates remain blocking. The current Azure deployment is live;
+future infrastructure changes require reviewing a fresh Terraform plan.
 
 ## Pipeline
 
@@ -74,7 +79,7 @@ Trivy config blocks HIGH/CRITICAL; Gitleaks blocks detected secrets. Unfixed and
 HIGH vulnerabilities remain residual risks. Trivy must pass cosign verification
 before installation. See [the threat model](docs/threat-model.md).
 
-Pinned tools: Terraform 1.17.0, AzureRM 5.10.0, Bandit 1.9.4, Trivy 0.76.1,
+Pinned tools: Terraform 1.17.0, AzureRM 5.10.0, AzAPI 2.13.0, Bandit 1.9.4, Trivy 0.76.1,
 Gitleaks 8.30.1, Newman 6.2.3. Python dependencies are pinned in requirements files.
 The Python base image uses a registry digest; npm/Terraform lockfiles are included.
 See [official verification sources](docs/sources.md).

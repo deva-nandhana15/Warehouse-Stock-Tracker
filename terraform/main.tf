@@ -46,7 +46,7 @@ resource "azurerm_container_group" "app" {
       STORAGE_BACKEND      = "azure-table"
       AZURE_AUTH_MODE      = "managed-identity"
       AZURE_TABLE_ENDPOINT = azurerm_storage_account.inventory.primary_table_endpoint
-      AZURE_TABLE_NAME     = azurerm_storage_table.inventory.name
+      AZURE_TABLE_NAME     = azapi_resource.inventory_table.name
       AZURE_CLIENT_ID      = azurerm_user_assigned_identity.app.client_id
     }
 
@@ -55,7 +55,7 @@ resource "azurerm_container_group" "app" {
       http_get {
         path   = "/health"
         port   = var.container_port
-        scheme = "Http"
+        scheme = "http"
       }
       initial_delay_seconds = 10
       period_seconds        = 30
