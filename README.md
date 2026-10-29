@@ -6,7 +6,8 @@ Live Azure application: http://warehouse-devanandhana15.centralindia.azurecontai
 
 Azure deployment and persistence across a container restart were verified on
 2026-10-29. The Docker-based Jenkins setup is documented in
-[Jenkins in Docker](docs/jenkins-docker.md); see verification.md for actual build evidence.
+[Jenkins in Docker](docs/jenkins-docker.md). Jenkins build #7 also verified Docker Hub
+publishing; see [verification](docs/verification.md) for actual build evidence.
 
 A Flask inventory API with a Docker-based Jenkins DevSecOps delivery pipeline,
 Docker packaging, Newman API tests and Terraform for Azure Container Instances.

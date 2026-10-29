@@ -1,5 +1,30 @@
 # Implementation verification
 
+## Docker Jenkins publishing verification — 2026-10-29
+
+Build **#7** finished **SUCCESS** in 78 seconds for commit
+`e59fdc2294a1f05ffba942de20c3723179046dc8`, with `PUBLISH_IMAGE=true`.
+Jenkins ran in Docker with its separate TLS Docker engine. The owner entered
+the Docker Hub credential privately in Jenkins; no credential values were
+read or committed by the setup scripts.
+
+- 51 pytest tests, 36 Newman assertions, dashboard/non-root checks and Azurite
+  persistence/concurrency integration: PASS.
+- Gitleaks, Bandit, configured Trivy filesystem/IaC/image gates, and Terraform
+  formatting/validation: PASS. The approved AZU-0012 exception remains in effect.
+- Jenkins Docker Hub authentication and push: PASS.
+- Image: `dva15/warehouse-stock-tracker:e59fdc2294a1f05ffba942de20c3723179046dc8`.
+- Digest independently confirmed by anonymous registry inspection:
+  `sha256:30490ede37e0c61fdb21126ec27169d256373c51adb14170b8bb60a1efcba783`.
+- Build reports and deployment handoff: `reports/jenkins-build-7/` locally and
+  Jenkins build #7 archived artifacts.
+- A publishing request now captures the checkout's branch metadata explicitly
+  and fails before publishing unless it is a trusted main branch checkout.
+- Azure deployment remains manual; this run did not update Azure.
+
+This section supersedes earlier Jenkins setup and publishing-pending entries.
+Intentional red security-gate demonstrations and teardown are not verified here.
+
 ## Live Azure verification — 2026-10-29
 
 The owner explicitly authorized CLI resource creation in this chat, superseding
@@ -21,7 +46,7 @@ user-assigned managed identity, table-scoped role and Azure Container Instance.
   identity was imported into Terraform, and the successful storage account's
   failed-request flag was cleared after checking its provisioning state.
 - Terraform security scan: PASS with only the previously approved AZU-0012 exception.
-- Jenkins: NOT VERIFIED; installation, job setup and actual build evidence remain.
+- Jenkins: verified separately above, including Docker Hub publishing in build #7.
 
 The earlier entries below are historical and are superseded by this section for
 Azure deployment and live persistence. Azure resources are now provisioned and

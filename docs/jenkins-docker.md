@@ -14,6 +14,16 @@ assertions, and Azurite persistence/concurrency integration. Publishing was
 disabled, so push and deployment handoff were skipped. Local evidence is in
 `reports/jenkins-build-4/`; Jenkins also archives the reports with the build.
 
+On 2026-10-29, build **#7** completed with **SUCCESS**, with `PUBLISH_IMAGE=true`,
+for commit `e59fdc2294a1f05ffba942de20c3723179046dc8` in 1 minute 18 seconds.
+All tests and configured security gates passed again. Jenkins authenticated using
+the owner-entered `dockerhub` credential and pushed
+`dva15/warehouse-stock-tracker:e59fdc2294a1f05ffba942de20c3723179046dc8`.
+An independent anonymous registry inspection confirmed digest
+`sha256:30490ede37e0c61fdb21126ec27169d256373c51adb14170b8bb60a1efcba783`.
+Evidence and the manual deployment handoff are in `reports/jenkins-build-7/`.
+Azure was not redeployed by this publishing run.
+
 ## Local services
 
 `compose.jenkins.yaml` starts Jenkins 2.580.2 and a separate Docker 28.5.1 engine.
@@ -71,8 +81,9 @@ checks and Newman -> Azurite persistence/concurrency integration -> optional pus
 -> manual deployment handoff. All native failures block later stages. The approved
 AZU-0012 exception remains file-scoped and expires 2026-11-26.
 
-The first run uses `PUBLISH_IMAGE=false`. Push and deployment handoff are skipped
-intentionally. To publish later, create Jenkins credential ID `dockerhub` yourself,
+The default is `PUBLISH_IMAGE=false`. Push and deployment handoff are skipped
+unless enabled. The owner configured credential ID `dockerhub` and publishing
+was verified in build #7. On another Jenkins installation, create that credential
 using your Docker Hub username/token, then enable publishing for a trusted main
 build. Terraform apply and Azure deployment remain separate reviewed operations.
 
