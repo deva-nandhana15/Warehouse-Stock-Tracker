@@ -4,6 +4,7 @@ Uses a deterministic public test credential solely inside the local emulator.
 Never connects to Azure or uses the developer's Azure identity.
 """
 import base64
+import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import subprocess
@@ -22,6 +23,8 @@ account = 'localwarehouse'
 # Deliberately public emulator-only credential, not an Azure account key.
 test_key = base64.b64encode(b'public-local-emulator-fixture-only').decode()
 container = None
+test_host = os.environ.get('DOCKER_TEST_HOST', '127.0.0.1')
+publish_ip = os.environ.get('DOCKER_PUBLISH_IP', '127.0.0.1')
 
 
 def command(*args):
@@ -29,11 +32,11 @@ def command(*args):
 
 
 try:
-    container = command('docker', 'run', '-d', '--rm', '-p', '127.0.0.1::10002',
+    container = command('docker', 'run', '-d', '--rm', '-p', f'{publish_ip}::10002',
                         '-e', f'AZURITE_ACCOUNTS={account}:{test_key}', image,
                         'azurite-table', '--tableHost', '0.0.0.0', '--skipApiVersionCheck', '--silent')
     port = command('docker', 'port', container, '10002/tcp').rsplit(':', 1)[1]
-    endpoint = f'http://127.0.0.1:{port}/{account}'
+    endpoint = f'http://{test_host}:{port}/{account}'
 
     def client():
         return TableClient(endpoint, 'inventory', credential=AzureNamedKeyCredential(account, test_key),

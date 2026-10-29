@@ -4,3 +4,10 @@ useDefault = true
 [[allowlists]]
 description = "Generated dependencies, provider binaries and local reports"
 paths = ['''(^|[\\/])(?:\.venv|node_modules|\.tools|\.terraform|reports|\.pytest_cache)([\\/]|$)''']
+
+[[allowlists]]
+description = "Public Jenkins plugin IDs and release versions from the official update center"
+condition = "AND"
+paths = ['''^jenkins/plugins\.txt$''']
+regexTarget = "line"
+regexes = ['''^[A-Za-z0-9_.-]+:[0-9][A-Za-z0-9_.+-]*$''']

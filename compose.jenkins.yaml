@@ -1,0 +1,40 @@
+name: warehouse-ci
+services:
+  engine:
+    image: docker:28.5.1-dind@sha256:ea9d20492ca1caaaba78e68453433895d256173c79281756e88b745647fcbcfd
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - docker-certs:/certs/client
+      - docker-data:/var/lib/docker
+    networks:
+      - ci
+    restart: unless-stopped
+  jenkins:
+    build:
+      context: ./jenkins
+    image: warehouse-jenkins:2.580.2-1
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DOCKER_HOST: tcp://engine:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: "1"
+      DOCKER_TEST_HOST: engine
+      DOCKER_PUBLISH_IP: 0.0.0.0
+      JAVA_OPTS: -Xms256m -Xmx1024m
+    volumes:
+      - jenkins-home:/var/jenkins_home
+      - docker-certs:/certs/client:ro
+    depends_on:
+      - engine
+    networks:
+      - ci
+    restart: unless-stopped
+volumes:
+  jenkins-home:
+  docker-certs:
+  docker-data:
+networks:
+  ci:

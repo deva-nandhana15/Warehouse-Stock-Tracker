@@ -39,3 +39,6 @@ tfplan
 .tools/
 node_modules/
 tmp/
+
+# Downloaded, verified Linux build tools for the local Jenkins image
+jenkins/assets/

@@ -5,9 +5,10 @@ Repository: [deva-nandhana15/Warehouse-Stock-Tracker](https://github.com/deva-na
 Live Azure application: http://warehouse-devanandhana15.centralindia.azurecontainer.io:5000
 
 Azure deployment and persistence across a container restart were verified on
-2026-10-29. Jenkins installation and a real pipeline run remain pending.
+2026-10-29. The Docker-based Jenkins setup is documented in
+[Jenkins in Docker](docs/jenkins-docker.md); see verification.md for actual build evidence.
 
-A Flask inventory API with a Windows-native Jenkins DevSecOps delivery pipeline,
+A Flask inventory API with a Docker-based Jenkins DevSecOps delivery pipeline,
 Docker packaging, Newman API tests and Terraform for Azure Container Instances.
 
 Start with [the step-by-step runbook](docs/runbook.md). Actual results and pending
@@ -72,7 +73,8 @@ Checkout -> pytest -> Gitleaks -> Bandit/Trivy filesystem -> Terraform checks an
 Trivy config -> Docker build -> Trivy image -> container smoke/Newman -> optional
 main-only push -> manual deployment handoff. Native executable failures stop the
 stage. Reports are archived on failure too. Docker Hub credentials use Jenkins ID
-`dockerhub`, bound only during optional publication. Configure agent label `windows`.
+`dockerhub`, bound only during optional publication. The default pipeline targets
+`docker-linux`; `Jenkinsfile.windows` preserves the previous Windows-agent variant.
 
 Bandit blocks MEDIUM/HIGH; Trivy vulnerability scans block fixable CRITICAL;
 Trivy config blocks HIGH/CRITICAL; Gitleaks blocks detected secrets. Unfixed and
